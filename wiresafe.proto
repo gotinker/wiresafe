@@ -1,0 +1,41 @@
+syntax = "proto3";
+package wiresafe;
+
+option go_package = "github.com/gotinker/wiresafe;wiresafe";
+/*  
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative wiresafe.proto
+*/
+
+service WireSafe {
+    rpc InitKey(KeySpec) returns (InitReply) {}
+    rpc encrypt(EncryptReq) returns (EncryptResp) {}
+    rpc Decrypt(DecryptReq) returns (DecryptResp) {}
+}
+
+message InitReply {
+    string workingkey = 1;
+}
+
+message KeySpec {
+    string safename = 1;
+    string keyname = 2;    
+}
+
+message EncryptReq {
+    KeySpec keyspec = 1;
+    bytes plaintext = 2;
+}
+
+message EncryptResp {
+    bytes ciphertext = 1;
+}
+
+message DecryptReq {
+    KeySpec keyspec = 1;
+    bytes ciphertext = 2;
+}
+
+message DecryptResp {
+    bytes plaintext = 1;
+}
+
